@@ -48,7 +48,7 @@ public class Day03 {
             }
 
             int finalWordPos = wordPos;
-            if ((double)oneCount >= (double)oxygenGeneratorRatingList.size() / 2) {
+            if ((double) oneCount >= (double) oxygenGeneratorRatingList.size() / 2) {
                 // Keep ones if equal
                 oxygenGeneratorRatingList.removeIf(s -> s.charAt(finalWordPos % wordLength) == '0');
             } else {
@@ -67,7 +67,7 @@ public class Day03 {
             }
 
             int finalWordPos = wordPos;
-            if ((double)oneCount >= (double)co2ScrubberRatingList.size() / 2) {
+            if ((double) oneCount >= (double) co2ScrubberRatingList.size() / 2) {
                 co2ScrubberRatingList.removeIf(s -> s.charAt(finalWordPos % wordLength) == '1');
             } else {
                 // Keep zeroes if equal
