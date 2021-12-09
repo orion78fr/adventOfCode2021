@@ -1,5 +1,9 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.InputParser;
+import fr.orion78.adventOfCode2021.utils.Part1;
+import fr.orion78.adventOfCode2021.utils.Part2;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -54,9 +58,32 @@ public class Day05 {
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader("day05.txt"));
-        List<String> l = br.lines().toList();
+    @Part1
+    public static long part1(List<Line> input) {
+        Map<Point, Integer> pointsHV = input.stream()
+                .filter(Line::isVerticalOrHorizontal)
+                .flatMap(Line::points)
+                .collect(Collectors.toMap(Function.identity(), x -> 1, Integer::sum));
+
+        return pointsHV.entrySet().stream()
+                .filter(x -> x.getValue() > 1)
+                .count();
+    }
+
+    @Part2
+    public static long part2(List<Line> input) {
+        Map<Point, Integer> points = input.stream()
+                .flatMap(Line::points)
+                .collect(Collectors.toMap(Function.identity(), x -> 1, Integer::sum));
+
+        return points.entrySet().stream()
+                .filter(x -> x.getValue() > 1)
+                .count();
+    }
+
+    @InputParser
+    public static List<Line> parse(Stream<String> stream) {
+        List<String> l = stream.toList();
 
         List<Line> lines = new ArrayList<>(l.size());
 
@@ -67,25 +94,14 @@ public class Day05 {
             lines.add(new Line(new Point(from[0], from[1]), new Point(to[0], to[1])));
         }
 
-        Map<Point, Integer> pointsHV = lines.stream()
-                .filter(Line::isVerticalOrHorizontal)
-                .flatMap(Line::points)
-                .collect(Collectors.toMap(Function.identity(), x -> 1, Integer::sum));
+        return lines;
+    }
 
-        long intersectionsHV = pointsHV.entrySet().stream()
-                .filter(x -> x.getValue() > 1)
-                .count();
+    public static void main(String[] args) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("day05.txt"));
+        List<Line> l = parse(br.lines());
 
-        System.out.println(intersectionsHV);
-
-        Map<Point, Integer> points = lines.stream()
-                .flatMap(Line::points)
-                .collect(Collectors.toMap(Function.identity(), x -> 1, Integer::sum));
-
-        long intersections = points.entrySet().stream()
-                .filter(x -> x.getValue() > 1)
-                .count();
-
-        System.out.println(intersections);
+        System.out.println(part1(l));
+        System.out.println(part2(l));
     }
 }

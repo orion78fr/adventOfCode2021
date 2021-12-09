@@ -1,17 +1,20 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.InputParser;
+import fr.orion78.adventOfCode2021.utils.Part1;
+import fr.orion78.adventOfCode2021.utils.Part2;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Day08 {
-    public static void main(String[] args) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader("day08.txt"));
-        List<String> l = br.lines().toList();
-
-        long res = l.stream()
+    @Part1
+    public static long part1(List<String> input) {
+        return input.stream()
                 .map(x -> x.split("\\|")[1])
                 .flatMap(x -> Arrays.stream(x.trim().split(" ")))
                 .filter(x -> {
@@ -19,15 +22,27 @@ public class Day08 {
                     return length == 2 || length == 3 || length == 4 || length == 7;
                 })
                 .count();
+    }
 
-        System.out.println(res);
-
-        int sum = l.stream()
+    @Part2
+    public static long part2(List<String> input) {
+        return input.stream()
                 .map(x -> x.replace(" | ", " ").split(" "))
                 .mapToInt(Day08::decodeSignal)
                 .sum();
+    }
 
-        System.out.println(sum);
+    @InputParser
+    public static List<String> parse(Stream<String> stream) {
+        return stream.toList();
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("day08.txt"));
+        List<String> l = parse(br.lines());
+
+        System.out.println(part1(l));
+        System.out.println(part2(l));
     }
 
     private static Set<Character> strToSet(String str) {

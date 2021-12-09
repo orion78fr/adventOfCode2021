@@ -1,31 +1,32 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.InputParser;
+import fr.orion78.adventOfCode2021.utils.Part1;
+import fr.orion78.adventOfCode2021.utils.Part2;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Day09 {
     public record Point(int x, int y) {
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader("day09.txt"));
-        List<String> lines = br.lines().toList();
-
-        //List<String> lines = List.of("2199943210", "3987894921", "9856789892", "8767896789", "9899965678");
-
+    @Part1
+    public static long part1(List<String> input) {
         long totalRisk = 0;
 
-        for (int i = 0; i < lines.size(); i++) {
-            String l = lines.get(i);
+        for (int i = 0; i < input.size(); i++) {
+            String l = input.get(i);
             for (int j = 0; j < l.length(); j++) {
                 int c = l.codePointAt(j);
                 if (
-                        (i + 1 < lines.size() && lines.get(i + 1).codePointAt(j) <= c) ||
-                                (i - 1 >= 0 && lines.get(i - 1).codePointAt(j) <= c) ||
-                                (j + 1 < l.length() && lines.get(i).codePointAt(j + 1) <= c) ||
-                                (j - 1 >= 0 && lines.get(i).codePointAt(j - 1) <= c)
+                        (i + 1 < input.size() && input.get(i + 1).codePointAt(j) <= c) ||
+                                (i - 1 >= 0 && input.get(i - 1).codePointAt(j) <= c) ||
+                                (j + 1 < l.length() && input.get(i).codePointAt(j + 1) <= c) ||
+                                (j - 1 >= 0 && input.get(i).codePointAt(j - 1) <= c)
                 ) {
                     continue;
                 }
@@ -33,13 +34,16 @@ public class Day09 {
             }
         }
 
-        System.out.println(totalRisk);
+        return totalRisk;
+    }
 
+    @Part2
+    public static long part2(List<String> input) {
         Set<Point> exploredPoints = new HashSet<>();
         List<Integer> basinSizes = new ArrayList<>();
 
-        for (int i = 0; i < lines.size(); i++) {
-            String l = lines.get(i);
+        for (int i = 0; i < input.size(); i++) {
+            String l = input.get(i);
             for (int j = 0; j < l.length(); j++) {
                 int c = l.codePointAt(j);
                 if (c == '9') {
@@ -59,13 +63,13 @@ public class Day09 {
                         continue;
                     }
 
-                    if (lines.get(p.x).codePointAt(p.y) == '9') {
+                    if (input.get(p.x).codePointAt(p.y) == '9') {
                         continue;
                     }
 
                     basinSize++;
 
-                    if (p.x + 1 < lines.size()) {
+                    if (p.x + 1 < input.size()) {
                         toExplore.add(new Point(p.x + 1, p.y));
                     }
                     if (p.x - 1 >= 0) {
@@ -85,6 +89,19 @@ public class Day09 {
 
         List<Integer> biggest = basinSizes.stream().sorted(Comparator.reverseOrder()).limit(3).toList();
 
-        System.out.println(biggest.get(0) * biggest.get(1) * biggest.get(2));
+        return biggest.get(0) * biggest.get(1) * biggest.get(2);
+    }
+
+    @InputParser
+    public static List<String> parse(Stream<String> stream) {
+        return stream.toList();
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("day09.txt"));
+        List<String> l = parse(br.lines());
+
+        System.out.println(part1(l));
+        System.out.println(part2(l));
     }
 }

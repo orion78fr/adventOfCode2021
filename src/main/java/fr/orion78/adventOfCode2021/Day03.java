@@ -1,22 +1,24 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.InputParser;
+import fr.orion78.adventOfCode2021.utils.Part1;
+import fr.orion78.adventOfCode2021.utils.Part2;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Day03 {
-    public static void main(String[] args) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader("day03.txt"));
-        List<String> l = br.lines().toList();
-        //List<String> l = List.of("00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000", "11001", "00010", "01010");
-
-        int lines = l.size();
-        int wordLength = l.get(0).length();
+    @Part1
+    public static long part1(List<String> input) {
+        int lines = input.size();
+        int wordLength = input.get(0).length();
         int[] oneCounts = new int[wordLength];
 
-        for (String s : l) {
+        for (String s : input) {
             for (int i = 0; i < s.length(); i++) {
                 if (s.charAt(i) == '1') {
                     oneCounts[i]++;
@@ -36,10 +38,15 @@ public class Day03 {
             }
         }
 
-        System.out.println(gamma * epsilon);
+        return gamma * epsilon;
+    }
+
+    @Part2
+    public static long part2(List<String> input) {
+        int wordLength = input.get(0).length();
 
         int wordPos = 0;
-        List<String> oxygenGeneratorRatingList = new ArrayList<>(l);
+        List<String> oxygenGeneratorRatingList = new ArrayList<>(input);
         while (oxygenGeneratorRatingList.size() != 1) {
             int oneCount = 0;
 
@@ -58,7 +65,7 @@ public class Day03 {
         }
 
         wordPos = 0;
-        List<String> co2ScrubberRatingList = new ArrayList<>(l);
+        List<String> co2ScrubberRatingList = new ArrayList<>(input);
         while (co2ScrubberRatingList.size() != 1) {
             int oneCount = 0;
 
@@ -76,6 +83,19 @@ public class Day03 {
             wordPos++;
         }
 
-        System.out.println(Long.parseLong(oxygenGeneratorRatingList.get(0), 2) * Long.parseLong(co2ScrubberRatingList.get(0), 2));
+        return Long.parseLong(oxygenGeneratorRatingList.get(0), 2) * Long.parseLong(co2ScrubberRatingList.get(0), 2);
+    }
+
+    @InputParser
+    public static List<String> parse(Stream<String> stream) {
+        return stream.toList();
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("day03.txt"));
+        List<String> l = parse(br.lines());
+
+        System.out.println(part1(l));
+        System.out.println(part2(l));
     }
 }
