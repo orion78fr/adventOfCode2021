@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 3, time = 5)
 public class Bench {
     private static List<Class<?>> classes = List.of(Day01.class, Day02.class, Day03.class, Day04.class, Day05.class,
-            Day06.class, Day07.class, Day08.class, Day09.class/*, Day10.class, Day11.class, Day12.class, Day13.class,
+            Day06.class, Day07.class, Day08.class, Day09.class, Day10.class/*, Day11.class, Day12.class, Day13.class,
             Day14.class, Day15.class, Day16.class, Day17.class, Day18.class, Day19.class, Day20.class, Day21.class,
             Day22.class, Day23.class, Day24.class, Day25.class*/);
 

@@ -42,7 +42,7 @@ public class Day05 {
             }
             */
 
-            List<Point> pts = new ArrayList<>();
+            List<Point> pts = new ArrayList<>(Math.max(Math.abs(to.x - from.x), Math.abs(to.y - from.y)));
 
             int x = from.x;
             int y = from.y;
@@ -101,7 +101,9 @@ public class Day05 {
         BufferedReader br = new BufferedReader(new FileReader("day05.txt"));
         List<Line> l = parse(br.lines());
 
-        System.out.println(part1(l));
-        System.out.println(part2(l));
+        while (true) {
+            System.out.println(part1(l));
+            System.out.println(part2(l));
+        }
     }
 }
