@@ -30,12 +30,12 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 1, time = 2)
 @Measurement(iterations = 3, time = 3)
 public class DayBench {
-    //private static List<Class<?>> classes = List.of(Day01.class, Day02.class, Day03.class, Day04.class, Day05.class,
-    //        Day06.class, Day07.class, Day08.class, Day09.class/*, Day10.class, Day11.class, Day12.class, Day13.class,
-    //        Day14.class, Day15.class, Day16.class, Day17.class, Day18.class, Day19.class, Day20.class, Day21.class,
-    //        Day22.class, Day23.class, Day24.class, Day25.class*/
-    //);
-    private static List<Class<?>> classes = List.of(Day05.class);
+    private static List<Class<?>> classes = List.of(Day01.class, Day02.class, Day03.class, Day04.class, Day05.class,
+            Day06.class, Day07.class, Day08.class, Day09.class, Day10.class/*, Day11.class, Day12.class, Day13.class,
+            Day14.class, Day15.class, Day16.class, Day17.class, Day18.class, Day19.class, Day20.class, Day21.class,
+            Day22.class, Day23.class, Day24.class, Day25.class*/
+    );
+    //private static List<Class<?>> classes = List.of(Day05.class);
 
     @Param("NOT INITIALIZED")
     private String className;
