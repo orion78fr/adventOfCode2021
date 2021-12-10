@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(value = 2, jvmArgsAppend = {"-server", "-disablesystemassertions"})
-@Warmup(iterations = 1, time = 5)
-@Measurement(iterations = 3, time = 3)
+@Warmup(iterations = 1, time = 10)
+@Measurement(iterations = 3, time = 5)
 public class Bench {
     private static List<Class<?>> classes = List.of(Day01.class, Day02.class, Day03.class, Day04.class, Day05.class,
             Day06.class, Day07.class, Day08.class, Day09.class/*, Day10.class, Day11.class, Day12.class, Day13.class,

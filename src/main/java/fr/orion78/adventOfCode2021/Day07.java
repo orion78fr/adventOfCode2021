@@ -23,7 +23,7 @@ public class Day07 {
     }
 
     @Part1(optLevel = 1)
-    public static long betterPart1(List<Integer> l) {
+    public static long part1Median(List<Integer> l) {
         int median = (l.get(l.size() / 2 - 1) + l.get(l.size() / 2)) / 2;
         return l.stream()
                 .mapToInt(x -> Math.abs(x - median))
@@ -55,7 +55,7 @@ public class Day07 {
         BufferedReader br = new BufferedReader(new FileReader("day07.txt"));
         List<Integer> l = parse(br.lines());
 
-        System.out.println(betterPart1(l));
+        System.out.println(part1Median(l));
         System.out.println(part2(l));
     }
 }

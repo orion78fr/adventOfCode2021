@@ -79,17 +79,18 @@ public class Day04 {
 
     @Part2
     public static long part2(Bingo input) {
+        List<Board> boards = new ArrayList<>(input.boards);
         for (int i = 5; i <= input.drawnNumbers.size(); i++) {
             List<Integer> drawn = input.drawnNumbers.subList(0, i);
 
-            for (int j = 0; j < input.boards.size(); j++) {
-                Board board = input.boards.get(j);
+            for (int j = 0; j < boards.size(); j++) {
+                Board board = boards.get(j);
 
                 if (board.isBingo(drawn)) {
-                    input.boards.remove(board);
+                    boards.remove(board);
                     j--;
 
-                    if (input.boards.size() == 0) {
+                    if (boards.size() == 0) {
                         return board.score(drawn);
                     }
                 }
