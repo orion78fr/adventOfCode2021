@@ -1,4 +1,4 @@
-# adventOfCode2021
+# Advent Of Code 2021
 
 ## Perfs
 
@@ -35,4 +35,10 @@ Day09	part2		1 476,8		± 398,92 us/op
 
 Day10	part1		59,93		± 18,04 us/op
 Day10	part2		82,75		± 22,61 us/op
+
+Day11	part1		1 232		± 70 us/op
+Day11	part2		3 080		± 47 us/op
+
+Day12	part2		82 496 		± 7 418 us/op
+Day12	part1		2 605 		± 71 us/op
 ```
