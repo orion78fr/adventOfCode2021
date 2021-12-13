@@ -2,8 +2,10 @@
 
 ## Perfs
 
+Aim is to keep the total under 1 second
+
 ```
-All days		99,33		± 7,12 ms/op
+All days		205		± 11 ms/op
 
 Day01	part1		2,02		± 2,21 us/op
 Day01	part2		2,34		± 4,16 us/op
@@ -39,8 +41,8 @@ Day10	part2		82,75		± 22,61 us/op
 Day11	part1		1 232		± 70 us/op
 Day11	part2		3 080		± 47 us/op
 
-Day12	part2		82 496 		± 7 418 us/op
 Day12	part1		2 605 		± 71 us/op
+Day12	part2		82 496 		± 7 418 us/op
 
 Day13	part1		15,54		± 0,62 us/op
 Day13	part2		181,1		± 3,63 us/op
