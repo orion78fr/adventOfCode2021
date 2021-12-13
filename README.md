@@ -41,4 +41,7 @@ Day11	part2		3 080		± 47 us/op
 
 Day12	part2		82 496 		± 7 418 us/op
 Day12	part1		2 605 		± 71 us/op
+
+Day13	part1		15,54		± 0,62 us/op
+Day13	part2		181,1		± 3,63 us/op
 ```
