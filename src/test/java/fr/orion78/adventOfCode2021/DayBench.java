@@ -1,8 +1,12 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.Day;
 import fr.orion78.adventOfCode2021.utils.InputParser;
 import fr.orion78.adventOfCode2021.utils.Part1;
 import fr.orion78.adventOfCode2021.utils.Part2;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.results.BenchmarkResult;
 import org.openjdk.jmh.results.Result;
@@ -11,6 +15,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.runner.options.VerboseMode;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,17 +31,10 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Fork(value = 0, jvmArgsAppend = {"-server", "-disablesystemassertions"})
-@Warmup(iterations = 1, time = 2)
-@Measurement(iterations = 3, time = 3)
+@Fork(value = 2, jvmArgsAppend = {"-server", "-disablesystemassertions"})
+@Warmup(iterations = 1, time = 10)
+@Measurement(iterations = 3, time = 5)
 public class DayBench {
-    private static List<Class<?>> classes = List.of(Day01.class, Day02.class, Day03.class, Day04.class, Day05.class,
-            Day06.class, Day07.class, Day08.class, Day09.class, Day10.class/*, Day11.class, Day12.class, Day13.class,
-            Day14.class, Day15.class, Day16.class, Day17.class, Day18.class, Day19.class, Day20.class, Day21.class,
-            Day22.class, Day23.class, Day24.class, Day25.class*/
-    );
-    //private static List<Class<?>> classes = List.of(Day05.class);
-
     @Param("NOT INITIALIZED")
     private String className;
     @Param("NOT INITIALIZED")
@@ -73,10 +71,23 @@ public class DayBench {
         method.invoke(null, input);
     }
 
-    public static void main(String[] args) throws RunnerException {
+    public static void main(String[] args) throws RunnerException, ClassNotFoundException {
         List<RunResult> runs = new ArrayList<>();
 
+        List<Class<?>> classes = new ArrayList<>();
+
+        try (ScanResult scanResult = new ClassGraph().enableAllInfo().acceptPackages("fr.orion78.adventOfCode2021").scan()) {
+            ClassInfoList allClasses = scanResult.getClassesWithAnnotation(Day.class);
+            List<String> names = allClasses.getNames();
+
+            for (String name : names) {
+                classes.add(Class.forName(name));
+            }
+        }
+
         for (Class<?> clazz : classes) {
+            System.out.println("Class : " + clazz.getSimpleName());
+
             String[] methods = Arrays.stream(clazz.getMethods())
                     .filter(m -> m.getAnnotation(Part1.class) != null || m.getAnnotation(Part2.class) != null)
                     .map(Method::getName)
@@ -84,6 +95,7 @@ public class DayBench {
 
             Options opt = new OptionsBuilder()
                     .include(DayBench.class.getCanonicalName())
+                    .verbosity(VerboseMode.SILENT)
                     .param("className", clazz.getCanonicalName())
                     .param("methodName", methods)
                     .build();
@@ -92,11 +104,11 @@ public class DayBench {
         }
 
         DecimalFormat f = new DecimalFormat();
-        f.setMaximumFractionDigits(2);
+        f.setMaximumFractionDigits(0);
 
         for (RunResult run : runs) {
             BenchmarkResult res = run.getAggregatedResult();
-            Result primary = res.getPrimaryResult();
+            Result<?> primary = res.getPrimaryResult();
 
             System.out.println(res.getParams().getParam("className") + "\t"
                     + res.getParams().getParam("methodName") + "\t"

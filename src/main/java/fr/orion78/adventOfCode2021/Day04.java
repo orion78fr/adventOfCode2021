@@ -1,5 +1,6 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.Day;
 import fr.orion78.adventOfCode2021.utils.InputParser;
 import fr.orion78.adventOfCode2021.utils.Part1;
 import fr.orion78.adventOfCode2021.utils.Part2;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Day
 public class Day04 {
     public record Bingo(List<Integer> drawnNumbers, List<Board> boards) {
     }

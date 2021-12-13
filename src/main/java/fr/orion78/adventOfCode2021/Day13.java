@@ -1,5 +1,6 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.Day;
 import fr.orion78.adventOfCode2021.utils.InputParser;
 import fr.orion78.adventOfCode2021.utils.Part1;
 import fr.orion78.adventOfCode2021.utils.Part2;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+@Day
 public class Day13 {
     public record Input(List<Point> points, List<Fold> folds) {
     }
@@ -74,7 +76,7 @@ public class Day13 {
         for (int i = 0; i <= maxY; i++) {
             for (int j = 0; j <= maxX; j++) {
                 if (points.contains(new Point(j, i))) {
-                    sb.append('X');
+                    sb.append('█');
                 } else {
                     sb.append(' ');
                 }

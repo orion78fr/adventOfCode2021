@@ -1,5 +1,6 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.Day;
 import fr.orion78.adventOfCode2021.utils.InputParser;
 import fr.orion78.adventOfCode2021.utils.Part1;
 import fr.orion78.adventOfCode2021.utils.Part2;
@@ -10,6 +11,7 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Stream;
 
+@Day
 public class Day09 {
     public record Point(int x, int y) {
     }

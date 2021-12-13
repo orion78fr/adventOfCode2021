@@ -1,8 +1,12 @@
 package fr.orion78.adventOfCode2021;
 
+import fr.orion78.adventOfCode2021.utils.Day;
 import fr.orion78.adventOfCode2021.utils.InputParser;
 import fr.orion78.adventOfCode2021.utils.Part1;
 import fr.orion78.adventOfCode2021.utils.Part2;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -27,18 +31,24 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 1, time = 10)
 @Measurement(iterations = 3, time = 5)
 public class Bench {
-    private static List<Class<?>> classes = List.of(Day01.class, Day02.class, Day03.class, Day04.class, Day05.class,
-            Day06.class, Day07.class, Day08.class, Day09.class, Day10.class/*, Day11.class, Day12.class, Day13.class,
-            Day14.class, Day15.class, Day16.class, Day17.class, Day18.class, Day19.class, Day20.class, Day21.class,
-            Day22.class, Day23.class, Day24.class, Day25.class*/);
-
-    private static List<List<String>> inputs = new ArrayList<>();
-    private static List<Method> inputParsers = new ArrayList<>();
-    private static List<Method> part1BestMethod = new ArrayList<>();
-    private static List<Method> part2BestMethod = new ArrayList<>();
+    private static final List<List<String>> inputs = new ArrayList<>();
+    private static final List<Method> inputParsers = new ArrayList<>();
+    private static final List<Method> part1BestMethod = new ArrayList<>();
+    private static final List<Method> part2BestMethod = new ArrayList<>();
 
     @Setup(Level.Trial)
-    public void setup() throws IOException {
+    public void setup() throws IOException, ClassNotFoundException {
+        List<Class<?>> classes = new ArrayList<>();
+
+        try (ScanResult scanResult = new ClassGraph().enableAllInfo().acceptPackages("fr.orion78.adventOfCode2021").scan()) {
+            ClassInfoList allClasses = scanResult.getClassesWithAnnotation(Day.class);
+            List<String> names = allClasses.getNames();
+
+            for (String name : names) {
+                classes.add(Class.forName(name));
+            }
+        }
+
         for (var clazz : classes) {
             try (var r = new BufferedReader(new FileReader(clazz.getSimpleName().toLowerCase() + ".txt"))) {
                 inputs.add(r.lines().toList());
@@ -63,7 +73,7 @@ public class Bench {
 
     @Benchmark
     public void fullTest() throws InvocationTargetException, IllegalAccessException {
-        for (int i = 0; i < classes.size(); i++) {
+        for (int i = 0; i < inputs.size(); i++) {
             List<String> input = inputs.get(i);
             Method inputParser = inputParsers.get(i);
             Method part1 = part1BestMethod.get(i);
