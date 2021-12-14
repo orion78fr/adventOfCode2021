@@ -46,11 +46,6 @@ public class Day14 {
         return m.values().stream().max(Comparator.naturalOrder()).get() - m.values().stream().min(Comparator.naturalOrder()).get();
     }
 
-    @Part1(optLevel = 1)
-    public static long part1v2(Input input) {
-        return polymerize(input, 10);
-    }
-
     // part2v1 and part2v2 did not finish
     // were recursive version of part1
 
@@ -98,6 +93,11 @@ public class Day14 {
         for (Map.Entry<Character, Long> e : r.entrySet()) {
             l.put(e.getKey(), l.getOrDefault(e.getKey(), 0L) + e.getValue());
         }
+    }
+
+    @Part1(optLevel = 2)
+    public static long part1v2(Input input) {
+        return polymerize(input, 10);
     }
 
     @Part2(optLevel = 2)
