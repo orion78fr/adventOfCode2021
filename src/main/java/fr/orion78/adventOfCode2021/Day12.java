@@ -8,7 +8,6 @@ import fr.orion78.adventOfCode2021.utils.Part2;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class Day12 {
 
     @Part1
     public static long part1(Map<Cave, Set<Cave>> input) {
-        return visit(input, START_CAVE, Collections.emptySet(), true);
+        return visit(input, START_CAVE, new HashSet<>(input.size()), true);
     }
 
     public static long visit(Map<Cave, Set<Cave>> input, Cave next, Set<Cave> visited, boolean visitedTwice) {
@@ -40,27 +39,30 @@ public class Day12 {
             return 1;
         }
 
-        Set<Cave> newVisited = new HashSet<>(visited);
-        newVisited.add(next);
-
+        boolean shouldRemove = visited.add(next);
         long paths = 0;
 
         Set<Cave> neighbors = input.get(next);
         for (Cave neighbor : neighbors) {
             if (neighbor.isSmall && visited.contains(neighbor)) {
                 if (!visitedTwice) {
-                    paths += visit(input, neighbor, newVisited, true);
+                    paths += visit(input, neighbor, visited, true);
                 }
             } else {
-                paths += visit(input, neighbor, newVisited, visitedTwice);
+                paths += visit(input, neighbor, visited, visitedTwice);
             }
         }
+
+        if (shouldRemove) {
+            visited.remove(next);
+        }
+
         return paths;
     }
 
     @Part2
     public static long part2(Map<Cave, Set<Cave>> input) {
-        return visit(input, START_CAVE, Collections.emptySet(), false);
+        return visit(input, START_CAVE, new HashSet<>(input.size()), false);
     }
 
     @InputParser
@@ -84,9 +86,7 @@ public class Day12 {
         BufferedReader br = new BufferedReader(new FileReader("day12.txt"));
         Map<Cave, Set<Cave>> l = parse(br.lines());
 
-        while (true) {
-            System.out.println(part1(l));
-            System.out.println(part2(l));
-        }
+        System.out.println(part1(l));
+        System.out.println(part2(l));
     }
 }

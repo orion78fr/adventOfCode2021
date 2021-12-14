@@ -7,7 +7,7 @@ Aim is to keep the total under 1 second.
 All perf tests results are performed on a 4790k@4.38GHz with 16Go of 3200MHz DDR3.
 
 ```
-All days                         191        ± 13 ms/op
+All days                         124        ± 5 ms/op
 
 Day01   part1                    2          ± 0 us/op
 Day01   part2                    2          ± 0 us/op
@@ -43,8 +43,8 @@ Day10   part2                    70         ± 2 us/op
 Day11   part1                    1 129      ± 15 us/op
 Day11   part2                    3 033      ± 9 us/op
 
-Day12   part1                    2 508      ± 280 us/op
-Day12   part2                    79 886     ± 3 751 us/op
+Day12	part1	                 995        ± 33 us/op
+Day12	part2	                 32 648     ± 2 641 us/op
 
 Day13   part1                    16         ± 1 us/op
 Day13   part2                    186        ± 4 us/op
