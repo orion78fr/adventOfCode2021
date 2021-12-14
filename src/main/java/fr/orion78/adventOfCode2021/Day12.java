@@ -17,7 +17,13 @@ import java.util.stream.Stream;
 
 @Day
 public class Day12 {
-    public record Pair(String a, String b) {
+    private static final Cave START_CAVE = new Cave("start", true);
+    private static final Cave END_CAVE = new Cave("end", true);
+
+    public record Pair(Cave a, Cave b) {
+    }
+
+    public record Cave(String name, boolean isSmall) {
     }
 
     public static boolean isSmallCave(String cave) {
@@ -25,23 +31,23 @@ public class Day12 {
     }
 
     @Part1
-    public static long part1(Map<String, Set<String>> input) {
-        return visit(input, "start", Collections.emptySet(), true);
+    public static long part1(Map<Cave, Set<Cave>> input) {
+        return visit(input, START_CAVE, Collections.emptySet(), true);
     }
 
-    public static long visit(Map<String, Set<String>> input, String next, Set<String> visited, boolean visitedTwice) {
-        if (next.equals("end")) {
+    public static long visit(Map<Cave, Set<Cave>> input, Cave next, Set<Cave> visited, boolean visitedTwice) {
+        if (next.equals(END_CAVE)) {
             return 1;
         }
 
-        Set<String> newVisited = new HashSet<>(visited);
+        Set<Cave> newVisited = new HashSet<>(visited);
         newVisited.add(next);
 
         long paths = 0;
 
-        Set<String> neighbors = input.get(next);
-        for (String neighbor : neighbors) {
-            if (isSmallCave(neighbor) && visited.contains(neighbor)) {
+        Set<Cave> neighbors = input.get(next);
+        for (Cave neighbor : neighbors) {
+            if (neighbor.isSmall && visited.contains(neighbor)) {
                 if (!visitedTwice) {
                     paths += visit(input, neighbor, newVisited, true);
                 }
@@ -53,31 +59,34 @@ public class Day12 {
     }
 
     @Part2
-    public static long part2(Map<String, Set<String>> input) {
-        return visit(input, "start", Collections.emptySet(), false);
+    public static long part2(Map<Cave, Set<Cave>> input) {
+        return visit(input, START_CAVE, Collections.emptySet(), false);
     }
 
     @InputParser
-    public static Map<String, Set<String>> parse(Stream<String> stream) {
+    public static Map<Cave, Set<Cave>> parse(Stream<String> stream) {
         return stream
-                .flatMap(s -> {
+                .map(s -> {
                     String[] split = s.split("-");
-                    return Stream.of(new Pair(split[0], split[1]), new Pair(split[1], split[0]));
+                    return new Pair(new Cave(split[0], isSmallCave(split[0])), new Cave(split[1], isSmallCave(split[1])));
                 })
+                .flatMap(p -> Stream.of(p, new Pair(p.b, p.a)))
                 .collect(Collectors.toMap(Pair::a, p -> Set.of(p.b), (a, b) -> {
-                    Set<String> s = new HashSet<>(a.size() + b.size());
+                    Set<Cave> s = new HashSet<>(a.size() + b.size());
                     s.addAll(a);
                     s.addAll(b);
-                    s.remove("start"); // Can't go back to start
+                    s.remove(START_CAVE); // Can't go back to start
                     return s;
                 }));
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader("day12.txt"));
-        Map<String, Set<String>> l = parse(br.lines());
+        Map<Cave, Set<Cave>> l = parse(br.lines());
 
-        System.out.println(part1(l));
-        System.out.println(part2(l));
+        while (true) {
+            System.out.println(part1(l));
+            System.out.println(part2(l));
+        }
     }
 }
