@@ -85,6 +85,8 @@ public class DayBench {
             }
         }
 
+        classes = List.of(Day14.class);
+
         for (Class<?> clazz : classes) {
             System.out.println("Class : " + clazz.getSimpleName());
 
