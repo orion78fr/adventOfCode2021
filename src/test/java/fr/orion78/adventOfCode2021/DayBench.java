@@ -15,6 +15,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.runner.options.TimeValue;
 import org.openjdk.jmh.runner.options.VerboseMode;
 
 import java.io.BufferedReader;
@@ -71,6 +72,20 @@ public class DayBench {
         method.invoke(null, input);
     }
 
+    private static class FastTest {
+        public static void main(String[] args) throws RunnerException {
+            Options opt = new OptionsBuilder()
+                    .include(DayBench.class.getCanonicalName())
+                    .param("className", Day15.class.getCanonicalName())
+                    .param("methodName", "part2")
+                    .forks(1)
+                    .warmupIterations(1).warmupTime(TimeValue.seconds(5))
+                    .measurementIterations(2).warmupTime(TimeValue.seconds(5))
+                    .build();
+            new Runner(opt).run();
+        }
+    }
+
     public static void main(String[] args) throws RunnerException, ClassNotFoundException {
         List<RunResult> runs = new ArrayList<>();
 
@@ -84,8 +99,6 @@ public class DayBench {
                 classes.add(Class.forName(name));
             }
         }
-
-        classes = List.of(Day12.class);
 
         for (Class<?> clazz : classes) {
             System.out.println("Class : " + clazz.getSimpleName());
