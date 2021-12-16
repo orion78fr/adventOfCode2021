@@ -56,4 +56,7 @@ Day14   part2v3                  189        ± 5 us/op
 
 Day15   part1                    32 004     ± 4 046 us/op
 Day15   part2                    387 374    ± 40 755 us/op
+
+Day16   part1                    131        ± 3 us/op
+Day16   part2                    156        ± 5 us/op
 ```
