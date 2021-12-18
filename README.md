@@ -60,6 +60,9 @@ Day15   part2                    387 374    ± 40 755 us/op
 Day16   part1                    131        ± 3 us/op
 Day16   part2                    156        ± 5 us/op
 
-Day17   part1                    0          ±  0  us/op
-Day17   part2                    635        ±  5  us/op
+Day17   part1                    0          ± 0 us/op
+Day17   part2                    635        ± 5 us/op
+
+Day18   part1                    681        ± 23 us/op
+Day18   part2                    13 353     ± 436 us/op
 ```
