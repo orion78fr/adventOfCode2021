@@ -60,6 +60,7 @@ public class Day20 {
     public static Set<Point> step(List<Boolean> enhancement, Set<Point> litPixels) {
         return litPixels.stream()
                 .flatMap(Point::neighbors) // Consider all points near lit pixels
+                .distinct()
                 .filter(p -> {
                     List<Boolean> l = p.neighbors().map(litPixels::contains).toList();
                     int idx = toInt(l);
@@ -73,6 +74,7 @@ public class Day20 {
             // Alternating on / off
             Set<Point> unlitPixels = litPixels.stream()
                     .flatMap(Point::neighbors) // Consider all points near lit pixels
+                    .distinct()
                     .filter(p -> {
                         List<Boolean> l = p.neighbors().map(litPixels::contains).toList();
                         int idx = toInt(l);
@@ -82,13 +84,13 @@ public class Day20 {
 
             return unlitPixels.stream()
                     .flatMap(Point::neighbors) // Consider all points near unlit pixels
+                    .distinct()
                     .filter(p -> {
                         List<Boolean> l = p.neighbors().map(unlitPixels::contains).map(b -> !b).toList();
                         int idx = toInt(l);
                         return enhancement.get(idx);
                     })
                     .collect(Collectors.toSet());
-
         } else {
             // Standard steps
             return step(enhancement, step(enhancement, litPixels));

@@ -66,6 +66,6 @@ Day17   part2                    635        ± 5 us/op
 Day18   part1                    681        ± 23 us/op
 Day18   part2                    13 353     ± 436 us/op
 
-Day19       3.5s
-Day20       1.8s
+Day19       ~3.5s
+Day20       ~1.0s
 ```
