@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Day
@@ -46,24 +47,12 @@ public class Day20 {
         return litPixels.size();
     }
 
-    public static int toInt(List<Boolean> l) {
-        int idx = 0;
-        for (Boolean b : l) {
-            idx <<= 1;
-            if (b) {
-                idx += 1;
-            }
-        }
-        return idx;
-    }
-
     public static Set<Point> step(List<Boolean> enhancement, Set<Point> litPixels) {
         return litPixels.stream()
                 .flatMap(Point::neighbors) // Consider all points near lit pixels
                 .distinct()
                 .filter(p -> {
-                    List<Boolean> l = p.neighbors().map(litPixels::contains).toList();
-                    int idx = toInt(l);
+                    int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a,b) -> (a << 1) + b);
                     return enhancement.get(idx);
                 })
                 .collect(Collectors.toSet());
@@ -76,8 +65,7 @@ public class Day20 {
                     .flatMap(Point::neighbors) // Consider all points near lit pixels
                     .distinct()
                     .filter(p -> {
-                        List<Boolean> l = p.neighbors().map(litPixels::contains).toList();
-                        int idx = toInt(l);
+                        int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a,b) -> (a << 1) + b);
                         return !enhancement.get(idx);
                     })
                     .collect(Collectors.toSet());
@@ -86,8 +74,7 @@ public class Day20 {
                     .flatMap(Point::neighbors) // Consider all points near unlit pixels
                     .distinct()
                     .filter(p -> {
-                        List<Boolean> l = p.neighbors().map(unlitPixels::contains).map(b -> !b).toList();
-                        int idx = toInt(l);
+                        int idx  = p.neighbors().mapToInt(x -> unlitPixels.contains(x) ? 0 : 1).reduce(0, (a,b) -> (a << 1) + b);
                         return enhancement.get(idx);
                     })
                     .collect(Collectors.toSet());
