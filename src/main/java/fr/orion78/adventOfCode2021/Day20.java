@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Day
@@ -48,14 +47,16 @@ public class Day20 {
     }
 
     public static Set<Point> step(List<Boolean> enhancement, Set<Point> litPixels) {
-        return litPixels.stream()
+        Set<Point> relitPixels = litPixels.stream()
                 .flatMap(Point::neighbors) // Consider all points near lit pixels
-                .distinct()
-                .filter(p -> {
-                    int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a,b) -> (a << 1) + b);
-                    return enhancement.get(idx);
-                })
                 .collect(Collectors.toSet());
+
+        relitPixels.removeIf(p -> {
+            int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a, b) -> (a << 1) + b);
+            return !enhancement.get(idx);
+        });
+        
+        return relitPixels;
     }
 
     public static Set<Point> doubleStep(List<Boolean> enhancement, Set<Point> litPixels) {
@@ -63,21 +64,20 @@ public class Day20 {
             // Alternating on / off
             Set<Point> unlitPixels = litPixels.stream()
                     .flatMap(Point::neighbors) // Consider all points near lit pixels
-                    .distinct()
-                    .filter(p -> {
-                        int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a,b) -> (a << 1) + b);
-                        return !enhancement.get(idx);
-                    })
                     .collect(Collectors.toSet());
+            unlitPixels.removeIf(p -> {
+                int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a, b) -> (a << 1) + b);
+                return enhancement.get(idx);
+            });
 
-            return unlitPixels.stream()
+            Set<Point> relitPixels = unlitPixels.stream()
                     .flatMap(Point::neighbors) // Consider all points near unlit pixels
-                    .distinct()
-                    .filter(p -> {
-                        int idx  = p.neighbors().mapToInt(x -> unlitPixels.contains(x) ? 0 : 1).reduce(0, (a,b) -> (a << 1) + b);
-                        return enhancement.get(idx);
-                    })
                     .collect(Collectors.toSet());
+            relitPixels.removeIf(p -> {
+                int idx = p.neighbors().mapToInt(x -> unlitPixels.contains(x) ? 0 : 1).reduce(0, (a, b) -> (a << 1) + b);
+                return !enhancement.get(idx);
+            });
+            return relitPixels;
         } else {
             // Standard steps
             return step(enhancement, step(enhancement, litPixels));
