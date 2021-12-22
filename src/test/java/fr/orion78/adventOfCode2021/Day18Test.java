@@ -126,4 +126,21 @@ public class Day18Test {
     public void testDoubleDigitParse() {
         Assert.assertEquals(Day18.parse("[[[[0,7],4],[15,[0,13]]],[1,1]]").toString(), "[[[[0,7],4],[15,[0,13]]],[1,1]]");
     }
+
+    @Test
+    public void testPrintSteps() {
+        Day18.Pair p = new Day18.Pair(null, Day18.parse("[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]"),
+                Day18.parse("[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]"));
+
+        while(true) {
+            System.out.println(p);
+            if(p.explode()){
+                System.out.print("Explode ");
+            } else if(p.split()){
+                System.out.print("Split ");
+            } else {
+                break;
+            }
+        }
+    }
 }

@@ -32,9 +32,9 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Fork(value = 2, jvmArgsAppend = {"-server", "-disablesystemassertions"})
-@Warmup(iterations = 1, time = 10)
-@Measurement(iterations = 3, time = 5)
+@Fork(value = 1, jvmArgsAppend = {"-server", "-disablesystemassertions"})
+@Warmup(iterations = 1, time = 5)
+@Measurement(iterations = 2, time = 5)
 public class DayBench {
     @Param("NOT INITIALIZED")
     private String className;
@@ -68,19 +68,24 @@ public class DayBench {
     }
 
     @Benchmark
-    public void bench() throws InvocationTargetException, IllegalAccessException {
-        method.invoke(null, input);
+    public Object bench() throws InvocationTargetException, IllegalAccessException {
+        return method.invoke(null, input);
     }
 
     private static class FastTest {
         public static void main(String[] args) throws RunnerException {
             Options opt = new OptionsBuilder()
                     .include(DayBench.class.getCanonicalName())
-                    .param("className", Day15.class.getCanonicalName())
-                    .param("methodName", "part2")
-                    .forks(1)
-                    .warmupIterations(1).warmupTime(TimeValue.seconds(5))
-                    .measurementIterations(2).warmupTime(TimeValue.seconds(5))
+                    //.param("className", Day05.class.getCanonicalName())
+                    //.param("methodName", "part2", "part2v2")
+                    .param("className", Day22.class.getCanonicalName())
+                    .param("methodName", "bothParts")
+                    //.forks(1)
+                    //.warmupIterations(1).warmupTime(TimeValue.seconds(5))
+                    //.measurementIterations(2).warmupTime(TimeValue.seconds(5))
+                    .forks(5)
+                    .warmupIterations(2)
+                    .measurementIterations(3)
                     .build();
             new Runner(opt).run();
         }

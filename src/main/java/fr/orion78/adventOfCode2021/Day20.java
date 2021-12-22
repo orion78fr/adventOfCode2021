@@ -33,17 +33,12 @@ public class Day20 {
         }
     }
 
-    public record Input(List<Boolean> enhancement, List<Point> litPixels) {
+    public record Result(long part1, long part2){
 
     }
 
-    @Part1
-    public static long part1(Input input) {
-        Set<Point> litPixels = new HashSet<>(input.litPixels);
+    public record Input(List<Boolean> enhancement, List<Point> litPixels) {
 
-        litPixels = doubleStep(input.enhancement, litPixels);
-
-        return litPixels.size();
     }
 
     public static Set<Point> step(List<Boolean> enhancement, Set<Point> litPixels) {
@@ -55,7 +50,7 @@ public class Day20 {
             int idx = p.neighbors().mapToInt(x -> litPixels.contains(x) ? 1 : 0).reduce(0, (a, b) -> (a << 1) + b);
             return !enhancement.get(idx);
         });
-        
+
         return relitPixels;
     }
 
@@ -84,15 +79,18 @@ public class Day20 {
         }
     }
 
-    @Part2
-    public static long part2(Input input) {
+    @Part1(bothParts = true)
+    public static Result bothParts(Input input) {
         Set<Point> litPixels = new HashSet<>(input.litPixels);
 
-        for (int i = 0; i < 50; i += 2) {
+        litPixels = doubleStep(input.enhancement, litPixels);
+        int part1 = litPixels.size();
+
+        for (int i = 2; i < 50; i += 2) {
             litPixels = doubleStep(input.enhancement, litPixels);
         }
 
-        return litPixels.size();
+        return new Result(part1, litPixels.size());
     }
 
     @InputParser
@@ -118,9 +116,8 @@ public class Day20 {
         BufferedReader br = new BufferedReader(new FileReader("day20.txt"));
         Input l = parse(br.lines());
 
-        System.out.println(part1(l));
         while (true) {
-            System.out.println(part2(l));
+            System.out.println(bothParts(l));
         }
     }
 }

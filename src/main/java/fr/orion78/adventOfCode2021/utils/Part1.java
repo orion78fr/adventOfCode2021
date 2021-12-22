@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface Part1 {
     int optLevel() default 0;
+
+    boolean bothParts() default false;
 }

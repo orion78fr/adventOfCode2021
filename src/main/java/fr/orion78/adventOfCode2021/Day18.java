@@ -8,7 +8,10 @@ import fr.orion78.adventOfCode2021.utils.Part2;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
@@ -22,6 +25,7 @@ public class Day18 {
         }
 
         public abstract long getMagnitude();
+
         public abstract Element clone();
     }
 
@@ -225,7 +229,7 @@ public class Day18 {
                 Element l = q.removeLast();
                 q.addLast(new Pair(null, l, r));
             } else if (i >= '0' && i <= '9') {
-                if(newNumber.get()) {
+                if (newNumber.get()) {
                     q.addLast(new Literal(null, i - '0'));
                     newNumber.set(false);
                 } else {
@@ -263,7 +267,7 @@ public class Day18 {
 
         for (int i = 0; i < input.size(); i++) {
             for (int j = 0; j < input.size(); j++) {
-                if(i == j){
+                if (i == j) {
                     continue;
                 }
                 max = Math.max(max, part1(List.of(input.get(i), input.get(j))));
