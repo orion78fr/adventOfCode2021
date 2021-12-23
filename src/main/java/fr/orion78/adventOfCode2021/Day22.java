@@ -3,6 +3,7 @@ package fr.orion78.adventOfCode2021;
 import fr.orion78.adventOfCode2021.utils.Day;
 import fr.orion78.adventOfCode2021.utils.InputParser;
 import fr.orion78.adventOfCode2021.utils.Part1;
+import fr.orion78.adventOfCode2021.utils.Part2;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -239,6 +240,74 @@ public class Day22 {
         return new Result(tree50.countLit(), tree.countLit());
     }
 
+    @Part2(optLevel = -1)
+    public static long part2v2(List<Step> input) {
+        Set<Long> xValues = new TreeSet<>();
+        Set<Long> yValues = new TreeSet<>();
+        Set<Long> zValues = new TreeSet<>();
+
+        xValues.add(Long.MIN_VALUE);
+        xValues.add(Long.MAX_VALUE);
+        yValues.add(Long.MIN_VALUE);
+        yValues.add(Long.MAX_VALUE);
+        zValues.add(Long.MIN_VALUE);
+        zValues.add(Long.MAX_VALUE);
+
+        for (Step step : input) {
+            xValues.add(step.xMin);
+            xValues.add(step.xMax);
+            yValues.add(step.yMin);
+            yValues.add(step.yMax);
+            zValues.add(step.zMin);
+            zValues.add(step.zMax);
+        }
+
+        long count = 0;
+
+        Iterator<Long> x = xValues.iterator();
+        long lowX;
+        long highX = x.next();
+
+        while (x.hasNext()) {
+            lowX = highX;
+            highX = x.next();
+
+            Iterator<Long> y = yValues.iterator();
+            long lowY;
+            long highY = y.next();
+
+            while (y.hasNext()) {
+                lowY = highY;
+                highY = y.next();
+
+                Iterator<Long> z = zValues.iterator();
+                long lowZ;
+                long highZ = z.next();
+
+                nextZ:
+                while (z.hasNext()) {
+                    lowZ = highZ;
+                    highZ = z.next();
+
+                    Leaf l = new Leaf(lowX, highX, lowY, highY, lowZ, highZ, true);
+
+                    for (int i = input.size() - 1; i >= 0; i--) {
+                        Step step = input.get(i);
+
+                        if (l.intersects(new Leaf(step))) {
+                            if (step.lit) {
+                                count += l.countLit();
+                            }
+                            continue nextZ;
+                        }
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
     @InputParser
     public static List<Step> parse(Stream<String> stream) {
         return stream.map(s -> {
@@ -257,8 +326,6 @@ public class Day22 {
         BufferedReader br = new BufferedReader(new FileReader("day22.txt"));
         List<Step> l = parse(br.lines());
 
-        while (true) {
-            System.out.println(bothParts(l));
-        }
+        System.out.println(bothParts(l));
     }
 }
