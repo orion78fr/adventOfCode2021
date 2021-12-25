@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Day
+//@Day
 public class Day23 {
     @Part1
     public static long part1(List<List<Integer>> input) {

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-@Day
+//@Day
 public class Day24 {
     private static final Pattern num = Pattern.compile("^-?\\d+$");
 
