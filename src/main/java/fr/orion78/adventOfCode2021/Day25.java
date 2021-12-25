@@ -53,7 +53,7 @@ public class Day25 {
 
     public static StepRes moveRight(int sizeX, int sizeY, Map<Point, Character> cucumbers) {
         boolean moved = false;
-        Map<Point, Character> res = new HashMap<>();
+        Map<Point, Character> res = new HashMap<>(cucumbers.size());
 
         for (var e : cucumbers.entrySet()) {
             if (e.getValue() != '>') {
@@ -76,7 +76,7 @@ public class Day25 {
 
     public static StepRes moveDown(int sizeX, int sizeY, Map<Point, Character> cucumbers) {
         boolean moved = false;
-        Map<Point, Character> res = new HashMap<>();
+        Map<Point, Character> res = new HashMap<>(cucumbers.size());
 
         for (var e : cucumbers.entrySet()) {
             if (e.getValue() != 'v') {
@@ -117,6 +117,7 @@ public class Day25 {
         BufferedReader br = new BufferedReader(new FileReader("day25.txt"));
         Input l = parse(br.lines());
 
+        while (true)
         System.out.println(part1(l));
     }
 }
