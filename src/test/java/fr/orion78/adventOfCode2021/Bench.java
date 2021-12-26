@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -31,6 +32,9 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 2, time = 30)
 @Measurement(iterations = 5, time = 5)
 public class Bench {
+    private record RunResult(Object part1, Object part2) {
+    }
+
     private static final List<List<String>> inputs = new ArrayList<>();
     private static final List<Method> inputParsers = new ArrayList<>();
     private static final List<Method> part1BestMethod = new ArrayList<>();
@@ -85,24 +89,31 @@ public class Bench {
     }
 
     @Benchmark
-    public List<Object> fullTest() throws InvocationTargetException, IllegalAccessException {
-        List<Object> res = new ArrayList<>(inputs.size() * 2);
+    public List<RunResult> fullTest() {
+        return IntStream.range(0, inputs.size())
+                .parallel()
+                .mapToObj(i -> {
+                    List<String> input = inputs.get(i);
+                    Method inputParser = inputParsers.get(i);
+                    Method part1 = part1BestMethod.get(i);
+                    Method part2 = part2BestMethod.get(i);
 
-        for (int i = 0; i < inputs.size(); i++) {
-            List<String> input = inputs.get(i);
-            Method inputParser = inputParsers.get(i);
-            Method part1 = part1BestMethod.get(i);
-            Method part2 = part2BestMethod.get(i);
+                    Object parsedInput = null;
+                    try {
+                        parsedInput = inputParser.invoke(null, input.stream());
+                        Object part1res = part1.invoke(null, parsedInput);
+                        Object part2res = null;
 
-            Object parsedInput = inputParser.invoke(null, input.stream());
-            res.add(part1.invoke(null, parsedInput));
+                        if (part2 != null) {
+                            part2res = part2.invoke(null, parsedInput);
+                        }
 
-            if (part2 != null) {
-                res.add(part2.invoke(null, parsedInput));
-            }
-        }
-
-        return res;
+                        return new RunResult(part1res, part2res);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
     }
 
     public static void main(String[] args) throws RunnerException {
