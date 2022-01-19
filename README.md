@@ -2,7 +2,7 @@
 
 ## Perfs
 
-Aim is to keep the total under 1 second.
+Aim is to keep the total under 1 second. (well that failed)
 
 All perf tests results are performed on a 4790k@4.38GHz with 16Go of 3200MHz DDR3.
 
